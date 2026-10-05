@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e8dfca">
+  <meta name="description" content="走进宋代沿河街市，在一幅可交互的长卷中行走、饮茶、乘船，感受灯火与春雨。">
+  <title>清明上河 · 一日千年</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='6' fill='%239b4b35'/%3E%3Ctext x='20' y='29' font-size='27' text-anchor='middle' fill='%23f4ead5'%3E清%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="preload" as="image" href="assets/people-v2.png">
+</head>
+<body>
+  <section id="atlas" aria-label="全景选景">
+    <div class="edition">宋 · 汴京风物</div>
+    <button id="about" class="text-button about">关于此卷 <span>↗</span></button>
+    <header class="atlas-heading">
+      <p class="eyebrow">汴河 · 一日千年</p>
+      <h1>清明上河<span class="seal" aria-hidden="true">入画</span></h1>
+      <p class="subtitle">移笔游目，点景入画</p>
+    </header>
+    <div class="scroll-frame">
+      <img id="panorama" src="assets/panorama.webp" alt="水磨、茶市、虹桥与城门相连的宋代沿河街市长卷" draggable="false">
+      <div class="atlas-places">
+        <button data-place="0" style="--x:10%"><span class="pin"></span><span>水磨作坊</span><small>一</small></button>
+        <button data-place="1" style="--x:33%"><span class="pin"></span><span>沿河茶市</span><small>二</small></button>
+        <button data-place="2" style="--x:64%"><span class="pin"></span><span>虹桥烟火</span><small>三</small></button>
+        <button data-place="3" style="--x:88%"><span class="pin"></span><span>城门货市</span><small>四</small></button>
+      </div>
+    </div>
+    <div class="atlas-footer"><span class="hairline"></span><p id="load-status" role="status">正在展开画卷…</p><span class="hairline"></span></div>
+    <p class="atlas-note">一卷烟火，半日闲游</p>
+  </section>
+
+  <main id="painting" hidden>
+    <canvas id="scene" tabindex="0" aria-label="宋代沿河街市。方向键行走，点击街道前往，拖动看景，E互动，空格暂停。"></canvas>
+    <div class="scene-header"><button id="return" class="paper-button">← <span>全景</span></button><span id="district-name">沿河茶市</span><button id="help" class="round-button" aria-label="操作说明">?</button></div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <div id="interactions" aria-label="场景互动"></div>
+    <section id="activity-panel" aria-label="画中互动" hidden>
+      <p class="eyebrow" id="activity-kicker">沿河小事</p>
+      <h2 id="activity-title">茶铺歇脚</h2>
+      <p id="activity-text" role="status" aria-live="polite"></p>
+      <div id="activity-goods" class="activity-goods" hidden>
+        <button data-goods="tea" aria-pressed="true">春茶</button>
+        <button data-goods="porcelain" aria-pressed="false">瓷器</button>
+        <button data-goods="silk" aria-pressed="false">绢布</button>
+      </div>
+      <div class="activity-meter" aria-hidden="true"><span id="activity-progress"></span></div>
+      <div class="activity-actions">
+        <button id="activity-main" class="paper-button">端杯品茶</button>
+        <button id="activity-secondary" class="paper-button">再添一盏</button>
+      </div>
+      <button id="activity-leave" class="text-button">继续游览 →</button>
+    </section>
+    <div id="story-panel" hidden><p class="eyebrow">画中故事 · 三</p><h2>虹桥过船</h2><p id="story-message">漕船将至，先落桅杆，再牵绳过桥。</p><div class="story-meter"><span id="story-progress"></span></div><button id="story-action" class="paper-button">按住落桅</button><button id="story-exit" class="text-button">离开故事</button></div>
+    <div class="scene-bottom">
+      <div class="district-stops" aria-label="浏览街区">
+        <button data-place="0" aria-label="浏览水磨作坊" title="水磨作坊"></button>
+        <button data-place="1" aria-label="浏览沿河茶市" title="沿河茶市"></button>
+        <button data-place="2" aria-label="浏览虹桥烟火" title="虹桥烟火"></button>
+        <button data-place="3" aria-label="浏览城门货市" title="城门货市"></button>
+      </div>
+      <nav class="controls" aria-label="画卷控制">
+        <button id="left" aria-label="向左走" title="向左走">‹</button><button id="play" aria-label="自动行走" title="自动行走">▷</button><button id="right" aria-label="向右走" title="向右走">›</button>
+        <span class="control-divider"></span>
+        <button id="ferry" title="招手乘船"><span class="icon" data-icon="boat"></span><span>招船</span></button>
+        <button id="night" aria-pressed="false" title="切换夜景"><span class="icon" data-icon="moon"></span><span>夜景</span></button>
+        <button id="rain" aria-pressed="false" title="清明时雨"><span class="icon" data-icon="rain"></span><span>时雨</span></button>
+        <button id="bridge" title="虹桥过船"><span class="icon" data-icon="bridge"></span><span>过船</span></button>
+      </nav>
+      <p class="scene-hint">← → 行走 <i>·</i> 点击街道前往 <i>·</i> E 互动 <i>·</i> 拖动看景</p>
+    </div>
+    <button id="follow" class="round-button corner-follow" aria-label="回到行人" title="回到行人"><span class="icon" data-icon="follow"></span></button>
+    <div class="corner-controls">
+      <button id="zoom" class="round-button" aria-label="放大细节" title="放大细节" aria-pressed="false"><span class="icon" data-icon="zoom"></span></button>
+      <button id="sound" class="round-button" aria-label="开启环境声音" title="开启环境声音" aria-pressed="false"><span class="icon" data-icon="sound"></span></button>
+      <button id="pause" class="round-button" aria-label="暂停动画" title="暂停动画" aria-pressed="false"><span class="icon" data-icon="pause"></span></button>
+      <button id="fullscreen" class="round-button" aria-label="全屏" title="全屏"><span class="icon" data-icon="fullscreen"></span></button>
+    </div>
+    <input id="position" type="range" min="0" max="1000" value="330" aria-label="画卷位置">
+    <button id="memo" class="paper-button" hidden>虹桥画稿 ↗</button>
+  </main>
+
+  <dialog id="info-dialog"><button class="dialog-close" aria-label="关闭">×</button><p class="eyebrow">游卷小记</p><h2>在画中，慢一些</h2><div id="info-content"></div><button class="paper-button dialog-close-bottom">继续游览 →</button></dialog>
+  <dialog id="sketch-dialog"><button class="dialog-close" aria-label="关闭画稿">×</button><p class="eyebrow">画中故事 · 三</p><h2>虹桥过船</h2><p class="sketch-copy">一船平安过桥，一笔记下烟火。</p><img id="sketch-image" alt="本次虹桥过船的画稿"><div class="sketch-footer"><span class="seal">亲历</span><button id="save-sketch" class="paper-button">保存画稿 ↓</button></div></dialog>
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
